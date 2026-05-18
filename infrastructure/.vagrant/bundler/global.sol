@@ -1,0 +1,1 @@
+{"dependencies":[["vagrant-qemu",["= 0.3.12"]],["ffi",[">= 1.0.0"]],["win32-process",[">= 0"]],["vagrant-sshfs",["= 1.3.7"]]],"checksum":"93f814c1ce0d1c1f04b30d4301c574fc41900a5c5ccf14bce5bada46d417e18e","vagrant_version":"2.4.9"}

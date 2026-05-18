@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: todo_db
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      todo-network:
+        aliases:
+          - db
+    deploy:
+      placement:
+        constraints:
+          - node.role == worker
+
+  api:
+    image: ${DOCKER_USER:-tu_usuario}/todo-api:latest
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: password
+      DB_NAME: todo_db
+      PORT: 3000
+    networks:
+      - todo-network
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+
+  client:
+    image: ${DOCKER_USER:-tu_usuario}/todo-client:latest
+    ports:
+      - "80:80"
+    networks:
+      - todo-network
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+networks:
+  todo-network:
+    driver: overlay
+
+volumes:
+  db_data:
